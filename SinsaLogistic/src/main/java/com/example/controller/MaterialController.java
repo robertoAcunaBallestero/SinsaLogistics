@@ -21,7 +21,7 @@ public class MaterialController {
     @Autowired
     private MaterialService materialService;
 
-    // 1. Se proceden a enlitar los materiales 
+    // 1. Se proceden a enlsitar los materiales 
 
     @GetMapping("/listado")
     public String listado(Model model){
@@ -37,10 +37,10 @@ public class MaterialController {
         return "material/modifica";
     }
 
-    // 3. Se procede a guadar el material 
+    // 3. Se procede a guardar el material 
 
-    @PostMapping("/guadar")
-    public String guadarMaterial(Material material) {
+    @PostMapping("/guardar")
+    public String guardarMaterial(Material material) {
         materialService.save(material);
         return "redirect:/material/listado";
 
