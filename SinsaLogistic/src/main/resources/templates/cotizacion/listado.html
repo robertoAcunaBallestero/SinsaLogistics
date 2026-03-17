@@ -3,10 +3,62 @@
 <head th:replace="~{general/fragmentos :: head}"></head>
 <body>
 <nav th:replace="~{general/fragmentos :: menu}"></nav>
-
-<div class="container mt-4">
-    <h2>Cotizaciones</h2>
-    <p>Este módulo queda preparado para la siguiente etapa del proyecto.</p>
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="bi bi-receipt me-2"></i>Cotizaciones</h2>
+        </div>
+        <div class="col-auto">
+            <a th:href="@{/cotizacion/nuevo}" class="btn btn-dark">
+                <i class="bi bi-plus-circle me-1"></i>Nueva Cotización
+            </a>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header bg-dark text-white">
+            <i class="bi bi-table me-2"></i>Listado de Cotizaciones
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th>Total</th>
+                        <th>Cliente</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="c : ${cotizaciones}">
+                        <td th:text="${c.idCotizacion}"></td>
+                        <td th:text="${c.fecha}"></td>
+                        <td>
+                            <span th:text="${c.estado}"
+                                  th:classappend="${c.estado == 'Pendiente'} ? 'badge bg-warning text-dark' :
+                                                  (${c.estado == 'Aprobada'} ? 'badge bg-success' : 'badge bg-secondary')">
+                            </span>
+                        </td>
+                        <td th:text="'₡' + ${c.total}"></td>
+                        <td th:text="${c.cliente.nombre}"></td>
+                        <td class="text-center">
+                            <a th:href="@{/cotizacion/modificar/{id}(id=${c.idCotizacion})}" class="btn btn-warning btn-sm me-1">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a th:href="@{/cotizacion/eliminar/{id}(id=${c.idCotizacion})}" class="btn btn-danger btn-sm"
+                               onclick="return confirm('¿Eliminar esta cotización?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(cotizaciones)}">
+                        <td colspan="6" class="text-center text-muted py-4">No hay cotizaciones registradas</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 </body>
 </html>

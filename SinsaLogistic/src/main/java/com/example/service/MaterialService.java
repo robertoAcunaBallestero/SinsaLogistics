@@ -1,10 +1,4 @@
-
 package com.example.service;
-
-/**
- *
- * @author Administrador(a)
- */
 
 import com.example.domain.Material;
 import java.util.List;

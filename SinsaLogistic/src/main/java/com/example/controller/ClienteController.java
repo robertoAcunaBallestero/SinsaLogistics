@@ -1,11 +1,4 @@
-
-/**
- *
- * @Pablo Romero
- */
-
 package com.example.controller;
-
 import com.example.domain.Cliente;
 import com.example.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,42 +13,45 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
-    // 1. Se procede a enListar clientes
+    // Listar clientes
     @GetMapping("/listado")
     public String listado(Model model) {
         var clientes = clienteService.getClientes();
-        model.addAttribute("cliente", cliente);
+        model.addAttribute("clientes", clientes);
+        model.addAttribute("cliente", new Cliente()); 
         return "cliente/listado";
-
     }
 
-    // 2. Se procede a mostrar formulario de nuevo cliente
+    // Mostrar formulario de nuevo cliente
     @GetMapping("/nuevo")
-    public String nuevoCliente(Cliente cliente) {
+    public String nuevoCliente(Model model) {
+        model.addAttribute("cliente", new Cliente()); 
         return "cliente/modifica";
-
     }
 
-    //3. Se procede a guardar un cliente nuevo o editado
+    // 3. Guardar cliente nuevo o editado
     @PostMapping("/guardar")
-    public String guardarCliente(Cliente cliente){
+    public String guardarCliente(Cliente cliente) {
         clienteService.save(cliente);
         return "redirect:/cliente/listado";
     }
 
-    //4. Se procede a editar un cliente 
+    // 4. Editar cliente
     @GetMapping("/modificar/{idCliente}")
-    public String modificarCliente(Cliente cliente, Model model) {
+    public String modificarCliente(@PathVariable Integer idCliente, Model model) {
+        Cliente cliente = new Cliente();
+        cliente.setIdCliente(idCliente); 
         cliente = clienteService.getCliente(cliente);
-        model.addAttribute("clliente", cliente);
+        model.addAttribute("cliente", cliente); 
         return "cliente/modifica";
     }
 
-    // 5. Se procede a eliminar cliente
+    // 5. Eliminar cliente
     @GetMapping("/eliminar/{idCliente}")
-    public String eliminarCliente(Cliente cliente){
+    public String eliminarCliente(@PathVariable Integer idCliente) {
+        Cliente cliente = new Cliente();
+        cliente.setIdCliente(idCliente); 
         clienteService.delete(cliente);
-        return"redirect:/cliente/listado";
+        return "redirect:/cliente/listado";
     }
-    
 }

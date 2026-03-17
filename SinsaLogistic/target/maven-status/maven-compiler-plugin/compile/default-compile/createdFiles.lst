@@ -1,0 +1,16 @@
+com\example\domain\Cliente.class
+com\example\service\ClienteServiceImpl.class
+com\example\service\MaterialServiceImpl.class
+com\example\service\ClienteService.class
+com\example\controller\MaterialController.class
+com\example\repository\MaterialRepository.class
+com\example\service\CotizacionServiceImpl.class
+com\example\domain\Material.class
+com\example\service\CotizacionService.class
+com\example\domain\Cotizacion.class
+com\example\BasicApplication.class
+com\example\controller\CotizacionController.class
+com\example\controller\ClienteController.class
+com\example\repository\ClienteRepository.class
+com\example\repository\CotizacionRepository.class
+com\example\service\MaterialService.class

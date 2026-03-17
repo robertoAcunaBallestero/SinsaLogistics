@@ -3,52 +3,95 @@
 <head th:replace="~{general/fragmentos :: head}"></head>
 <body>
 <nav th:replace="~{general/fragmentos :: menu}"></nav>
-
-<div class="container mt-4">
-    <h2>Materiales</h2>
-
-    <form th:action="@{/material/guardar}" method="post" th:object="${material}" class="mb-4">
-        <div class="mb-2">
-            <input type="text" th:field="*{nombre}" class="form-control" placeholder="Nombre">
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="bi bi-box-seam me-2"></i>Materiales</h2>
         </div>
-        <div class="mb-2">
-            <input type="number" th:field="*{precio}" class="form-control" placeholder="Precio">
+    </div>
+    <div class="row g-4">
+        <!-- Formulario -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <i class="bi bi-plus-circle me-2"></i>Nuevo Material
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/material/guardar}" method="post" th:object="${material}">
+                        <input type="hidden" th:field="*{idMaterial}">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Nombre</label>
+                            <input type="text" th:field="*{nombre}" class="form-control" placeholder="Nombre del material">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Precio</label>
+                            <input type="number" th:field="*{precio}" class="form-control" placeholder="0">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Stock</label>
+                            <input type="number" th:field="*{stock}" class="form-control" placeholder="0">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Descripción</label>
+                            <textarea th:field="*{descripcion}" class="form-control" rows="2" placeholder="Descripción"></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-dark">
+                                <i class="bi bi-save me-1"></i>Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="mb-2">
-            <input type="number" th:field="*{stock}" class="form-control" placeholder="Stock">
+        <!-- Tabla -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <i class="bi bi-table me-2"></i>Listado de Materiales
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Descripción</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="m : ${materiales}">
+                                <td th:text="${m.idMaterial}"></td>
+                                <td th:text="${m.nombre}"></td>
+                                <td th:text="'₡' + ${m.precio}"></td>
+                                <td>
+                                    <span th:text="${m.stock}"
+                                          th:classappend="${m.stock < 10} ? 'badge bg-danger' : 'badge bg-success'">
+                                    </span>
+                                </td>
+                                <td th:text="${m.descripcion}"></td>
+                                <td class="text-center">
+                                    <a th:href="@{/material/modificar/{id}(id=${m.idMaterial})}" class="btn btn-warning btn-sm me-1">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a th:href="@{/material/eliminar/{id}(id=${m.idMaterial})}" class="btn btn-danger btn-sm"
+                                       onclick="return confirm('¿Eliminar este material?')">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(materiales)}">
+                                <td colspan="6" class="text-center text-muted py-4">No hay materiales registrados</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="mb-2">
-            <input type="text" th:field="*{descripcion}" class="form-control" placeholder="Descripción">
-        </div>
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
-
-    <a th:href="@{/material/stockBajo(limite=5)}" class="btn btn-warning mb-3">Ver stock bajo</a>
-
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Precio</th>
-                <th>Stock</th>
-                <th>Descripción</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="m : ${materiales}">
-                <td th:text="${m.idMaterial}"></td>
-                <td th:text="${m.nombre}"></td>
-                <td th:text="${m.precio}"></td>
-                <td th:text="${m.stock}"></td>
-                <td th:text="${m.descripcion}"></td>
-                <td>
-                    <a th:href="@{/material/eliminar/{id}(id=${m.idMaterial})}" class="btn btn-danger btn-sm">Eliminar</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    </div>
 </div>
 </body>
 </html>

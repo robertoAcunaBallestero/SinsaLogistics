@@ -3,45 +3,85 @@
 <head th:replace="~{general/fragmentos :: head}"></head>
 <body>
 <nav th:replace="~{general/fragmentos :: menu}"></nav>
-
-<div class="container mt-4">
-    <h2>Clientes</h2>
-
-    <form th:action="@{/cliente/guardar}" method="post" th:object="${cliente}" class="mb-4">
-        <div class="mb-2">
-            <input type="text" th:field="*{nombre}" class="form-control" placeholder="Nombre">
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col">
+            <h2><i class="bi bi-people me-2"></i>Clientes</h2>
         </div>
-        <div class="mb-2">
-            <input type="email" th:field="*{correo}" class="form-control" placeholder="Correo">
+    </div>
+    <div class="row g-4">
+        <!-- Formulario -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <i class="bi bi-person-plus me-2"></i>Nuevo Cliente
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/cliente/guardar}" method="post" th:object="${cliente}">
+                        <input type="hidden" th:field="*{idCliente}">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Nombre</label>
+                            <input type="text" th:field="*{nombre}" class="form-control" placeholder="Nombre completo">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Correo</label>
+                            <input type="email" th:field="*{correo}" class="form-control" placeholder="correo@ejemplo.com">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Dirección</label>
+                            <input type="text" th:field="*{direccion}" class="form-control" placeholder="Dirección">
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-dark">
+                                <i class="bi bi-save me-1"></i>Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="mb-2">
-            <input type="text" th:field="*{direccion}" class="form-control" placeholder="Dirección">
+        <!-- Tabla -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <i class="bi bi-table me-2"></i>Listado de Clientes
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Dirección</th>
+                                <th class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="c : ${clientes}">
+                                <td th:text="${c.idCliente}"></td>
+                                <td th:text="${c.nombre}"></td>
+                                <td th:text="${c.correo}"></td>
+                                <td th:text="${c.direccion}"></td>
+                                <td class="text-center">
+                                    <a th:href="@{/cliente/modificar/{id}(id=${c.idCliente})}" class="btn btn-warning btn-sm me-1">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a th:href="@{/cliente/eliminar/{id}(id=${c.idCliente})}" class="btn btn-danger btn-sm"
+                                       onclick="return confirm('¿Eliminar este cliente?')">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(clientes)}">
+                                <td colspan="5" class="text-center text-muted py-4">No hay clientes registrados</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
-
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Dirección</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="c : ${clientes}">
-                <td th:text="${c.idCliente}"></td>
-                <td th:text="${c.nombre}"></td>
-                <td th:text="${c.correo}"></td>
-                <td th:text="${c.direccion}"></td>
-                <td>
-                    <a th:href="@{/cliente/eliminar/{id}(id=${c.idCliente})}" class="btn btn-danger btn-sm">Eliminar</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    </div>
 </div>
 </body>
 </html>
