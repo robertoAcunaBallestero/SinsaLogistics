@@ -3,15 +3,19 @@
  * 
  */
 
-package com.example.repository;
+package com.example.service;
 
 import com.example.domain.Cliente;
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
 
-@Repository
-public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
+public interface ClienteService  {
     
-    //Usamos Spring para crea la consulta automáticamente por el nombre del método
-    //Se usa el Útil para cuando un cliente quiera iniciar sesión o buscar sus datos
-    Cliente findByCorreo(String correo);
+    public List<Cliente> getClientes();
+
+    public Cliente getCliente(Cliente cliente);
+
+    public void save(Cliente cliente);
+
+    public void delete(Cliente cliente);
+        
 }
