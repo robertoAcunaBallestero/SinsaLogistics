@@ -1,13 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package com.example.repository;
-
 /**
  *
- * @author Administrador(a)
+ * Pablo Romero
  */
-public class MaterialRepository {
+
+
+package com.example.repository;
+
+import com.example.domain.Material;
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+
+public interface MaterialRepository extends JpaRepository<Material, Interger> {
+
+    List<Material> findByStockLessThanEqual(Integer stock);
     
 }
