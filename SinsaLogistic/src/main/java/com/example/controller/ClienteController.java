@@ -14,7 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequesteMapping("/cliente")
+@RequestMapping("/cliente")
 public class ClienteController {
 
     @Autowired
@@ -24,7 +24,7 @@ public class ClienteController {
     @GetMapping("/listado")
     public String listado(Model model) {
         var clientes = clienteService.getClientes();
-        model.addAttribute("clientes", clientes);
+        model.addAttribute("cliente", cliente);
         return "cliente/listado";
 
     }
@@ -38,7 +38,7 @@ public class ClienteController {
 
     //3. Se procede a guardar un cliente nuevo o editado
     @PostMapping("/guardar")
-    public String guadarCliente(Cliente cliente){
+    public String guardarCliente(Cliente cliente){
         clienteService.save(cliente);
         return "redirect:/cliente/listado";
     }
