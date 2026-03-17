@@ -1,15 +1,54 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: menu}"></nav>
+
+<div class="container mt-4">
+    <h2>Materiales</h2>
+
+    <form th:action="@{/material/guardar}" method="post" th:object="${material}" class="mb-4">
+        <div class="mb-2">
+            <input type="text" th:field="*{nombre}" class="form-control" placeholder="Nombre">
+        </div>
+        <div class="mb-2">
+            <input type="number" th:field="*{precio}" class="form-control" placeholder="Precio">
+        </div>
+        <div class="mb-2">
+            <input type="number" th:field="*{stock}" class="form-control" placeholder="Stock">
+        </div>
+        <div class="mb-2">
+            <input type="text" th:field="*{descripcion}" class="form-control" placeholder="Descripción">
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+
+    <a th:href="@{/material/stockBajo(limite=5)}" class="btn btn-warning mb-3">Ver stock bajo</a>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Descripción</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="m : ${materiales}">
+                <td th:text="${m.idMaterial}"></td>
+                <td th:text="${m.nombre}"></td>
+                <td th:text="${m.precio}"></td>
+                <td th:text="${m.stock}"></td>
+                <td th:text="${m.descripcion}"></td>
+                <td>
+                    <a th:href="@{/material/eliminar/{id}(id=${m.idMaterial})}" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
 </html>

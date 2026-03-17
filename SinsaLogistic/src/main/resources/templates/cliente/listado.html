@@ -1,15 +1,47 @@
 <!DOCTYPE html>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
--->
-<html>
-    <head>
-        <title>TODO supply a title</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{general/fragmentos :: head}"></head>
+<body>
+<nav th:replace="~{general/fragmentos :: menu}"></nav>
+
+<div class="container mt-4">
+    <h2>Clientes</h2>
+
+    <form th:action="@{/cliente/guardar}" method="post" th:object="${cliente}" class="mb-4">
+        <div class="mb-2">
+            <input type="text" th:field="*{nombre}" class="form-control" placeholder="Nombre">
+        </div>
+        <div class="mb-2">
+            <input type="email" th:field="*{correo}" class="form-control" placeholder="Correo">
+        </div>
+        <div class="mb-2">
+            <input type="text" th:field="*{direccion}" class="form-control" placeholder="Dirección">
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Dirección</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="c : ${clientes}">
+                <td th:text="${c.idCliente}"></td>
+                <td th:text="${c.nombre}"></td>
+                <td th:text="${c.correo}"></td>
+                <td th:text="${c.direccion}"></td>
+                <td>
+                    <a th:href="@{/cliente/eliminar/{id}(id=${c.idCliente})}" class="btn btn-danger btn-sm">Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
 </html>
