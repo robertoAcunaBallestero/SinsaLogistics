@@ -83,3 +83,10 @@ CREATE TABLE Material_proveedor (
   CONSTRAINT fk_matprov_proveedor
     FOREIGN KEY (id_proveedor) REFERENCES Proveedor(id_proveedor));
 
+INSERT INTO rol (nombre) VALUES ('ADMIN');
+INSERT INTO rol (nombre) VALUES ('CLIENTE');
+
+INSERT INTO usuario (username, password, activo) 
+VALUES ('admin', '$2a$10$encryptedPassword', 1);
+
+
