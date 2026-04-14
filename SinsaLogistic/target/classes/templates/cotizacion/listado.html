@@ -1,64 +1,153 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{general/fragmentos :: head}"></head>
-<body>
-<nav th:replace="~{general/fragmentos :: menu}"></nav>
-<div class="container mt-5">
-    <div class="row mb-4">
-        <div class="col">
-            <h2><i class="bi bi-receipt me-2"></i>Cotizaciones</h2>
-        </div>
-        <div class="col-auto">
-            <a th:href="@{/cotizacion/nuevo}" class="btn btn-dark">
-                <i class="bi bi-plus-circle me-1"></i>Nueva Cotización
-            </a>
-        </div>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cotizaciones</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand">Sinsa Logistics — Admin</span>
+    <div>
+        <a href="/material/listado" class="btn btn-outline-light btn-sm me-2">Materiales</a>
+        <a href="/cliente/listado" class="btn btn-outline-light btn-sm me-2">Clientes</a>
+        <a href="/logout" class="btn btn-outline-light btn-sm">Cerrar sesión</a>
     </div>
-    <div class="card">
-        <div class="card-header bg-dark text-white">
-            <i class="bi bi-table me-2"></i>Listado de Cotizaciones
-        </div>
+</nav>
+
+<div class="container mt-4">
+    <h4 class="mb-3">Gestión de Cotizaciones</h4>
+
+    <div class="card shadow-sm">
         <div class="card-body p-0">
             <table class="table table-hover mb-0">
-                <thead>
+                <thead class="table-dark">
                     <tr>
-                        <th>ID</th>
-                        <th>Fecha</th>
-                        <th>Estado</th>
-                        <th>Total</th>
+                        <th>#</th>
                         <th>Cliente</th>
-                        <th class="text-center">Acciones</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                        <th>Detalle</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr th:each="c : ${cotizaciones}">
-                        <td th:text="${c.idCotizacion}"></td>
-                        <td th:text="${c.fecha}"></td>
+                <tbody th:each="cotizacion : ${cotizaciones}">
+
+                    <!-- Fila principal -->
+                    <tr>
+                        <td th:text="${cotizacion.idCotizacion}"></td>
+                        <td th:text="${cotizacion.cliente != null ? cotizacion.cliente.nombre : 'Sin cliente'}"></td>
+                        <td th:text="${cotizacion.fecha}"></td>
+                        <td>₡<span th:text="${cotizacion.total}"></span></td>
                         <td>
-                            <span th:text="${c.estado}"
-                                  th:classappend="${c.estado == 'Pendiente'} ? 'badge bg-warning text-dark' :
-                                                  (${c.estado == 'Aprobada'} ? 'badge bg-success' : 'badge bg-secondary')">
-                            </span>
+                            <span th:if="${cotizacion.estado == 'PENDIENTE'}"
+                                  class="badge bg-warning text-dark">PENDIENTE</span>
+                            <span th:if="${cotizacion.estado == 'APROBADA'}"
+                                  class="badge bg-success">APROBADA</span>
+                            <span th:if="${cotizacion.estado == 'RECHAZADA'}"
+                                  class="badge bg-danger">RECHAZADA</span>
                         </td>
-                        <td th:text="'₡' + ${c.total}"></td>
-                        <td th:text="${c.cliente.nombre}"></td>
-                        <td class="text-center">
-                            <a th:href="@{/cotizacion/modificar/{id}(id=${c.idCotizacion})}" class="btn btn-warning btn-sm me-1">
-                                <i class="bi bi-pencil"></i>
+                        <td>
+                            <a th:if="${cotizacion.estado == 'PENDIENTE'}"
+                               th:href="@{/cotizacion/aprobar/{id}(id=${cotizacion.idCotizacion})}"
+                               class="btn btn-success btn-sm me-1"
+                               onclick="return confirm('¿Aprobar esta cotización?')">
+                               Aprobar
                             </a>
-                            <a th:href="@{/cotizacion/eliminar/{id}(id=${c.idCotizacion})}" class="btn btn-danger btn-sm"
+                            <a th:if="${cotizacion.estado == 'PENDIENTE'}"
+                               th:href="@{/cotizacion/rechazar/{id}(id=${cotizacion.idCotizacion})}"
+                               class="btn btn-danger btn-sm me-1"
+                               onclick="return confirm('¿Rechazar esta cotización?')">
+                               Rechazar
+                            </a>
+                            <a th:href="@{/cotizacion/modificar/{id}(id=${cotizacion.idCotizacion})}"
+                               class="btn btn-outline-secondary btn-sm me-1">
+                               Editar
+                            </a>
+                            <a th:href="@{/cotizacion/eliminar/{id}(id=${cotizacion.idCotizacion})}"
+                               class="btn btn-outline-danger btn-sm"
                                onclick="return confirm('¿Eliminar esta cotización?')">
-                                <i class="bi bi-trash"></i>
+                               Eliminar
                             </a>
                         </td>
+                        <td>
+                            <button class="btn btn-outline-primary btn-sm"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    th:attr="data-bs-target='#detalle-' + ${cotizacion.idCotizacion}">
+                                Ver detalle
+                            </button>
+                        </td>
                     </tr>
-                    <tr th:if="${#lists.isEmpty(cotizaciones)}">
-                        <td colspan="6" class="text-center text-muted py-4">No hay cotizaciones registradas</td>
+
+                    <!-- Fila de detalles expandible -->
+                    <tr>
+                        <td colspan="7" class="p-0 border-0">
+                            <div class="collapse"
+                                 th:id="'detalle-' + ${cotizacion.idCotizacion}">
+                                <div class="p-3 bg-white border-top">
+
+                                    <!-- Datos de contacto -->
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <small class="text-muted">Teléfono</small>
+                                            <p class="mb-0 fw-semibold"
+                                               th:text="${cotizacion.telefono != null ? cotizacion.telefono : 'No indicado'}">
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <small class="text-muted">Dirección de entrega</small>
+                                            <p class="mb-0 fw-semibold"
+                                               th:text="${cotizacion.direccionEntrega != null ? cotizacion.direccionEntrega : 'No indicada'}">
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Materiales -->
+                                    <h6 class="mb-2 text-muted">Materiales solicitados</h6>
+                                    <p th:if="${#lists.isEmpty(cotizacion.detalles)}"
+                                       class="text-muted small mb-0">
+                                        Sin materiales registrados.
+                                    </p>
+                                    <table th:if="${not #lists.isEmpty(cotizacion.detalles)}"
+                                           class="table table-sm table-bordered mb-0">
+                                        <thead class="table-secondary">
+                                            <tr>
+                                                <th>Material</th>
+                                                <th>Cantidad</th>
+                                                <th>Precio unitario</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="detalle : ${cotizacion.detalles}">
+                                                <td th:text="${detalle.material.nombre}"></td>
+                                                <td th:text="${detalle.cantidad}"></td>
+                                                <td>₡<span th:text="${detalle.precioUnitario}"></span></td>
+                                                <td>₡<span th:text="${detalle.subtotal}"></span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
+
                 </tbody>
             </table>
+
+            <div th:if="${#lists.isEmpty(cotizaciones)}"
+                 class="text-center text-muted py-4">
+                No hay cotizaciones registradas.
+            </div>
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

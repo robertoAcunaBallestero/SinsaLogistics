@@ -8,7 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.time.LocalDate;
 
+/*
+Ángel Rodríguez Vargas
+*/
 @Controller
 @RequestMapping("/cotizacion")
 public class CotizacionController {
@@ -19,11 +23,10 @@ public class CotizacionController {
     @Autowired
     private ClienteService clienteService;
 
-    // 1. Listar cotizaciones
+    // 1. Listar cotizaciones (ADMIN)
     @GetMapping("/listado")
     public String listado(Model model) {
         model.addAttribute("cotizaciones", cotizacionService.getCotizaciones());
-        model.addAttribute("cotizacion", new Cotizacion());
         return "cotizacion/listado";
     }
 
@@ -38,6 +41,9 @@ public class CotizacionController {
     // 3. Guardar cotizacion
     @PostMapping("/guardar")
     public String guardarCotizacion(Cotizacion cotizacion) {
+        if (cotizacion.getFecha() == null) {
+            cotizacion.setFecha(LocalDate.now());
+        }
         cotizacionService.save(cotizacion);
         return "redirect:/cotizacion/listado";
     }
@@ -59,6 +65,20 @@ public class CotizacionController {
         Cotizacion cotizacion = new Cotizacion();
         cotizacion.setIdCotizacion(idCotizacion);
         cotizacionService.delete(cotizacion);
+        return "redirect:/cotizacion/listado";
+    }
+
+    // 6. Aprobar cotizacion (ADMIN)
+    @GetMapping("/aprobar/{idCotizacion}")
+    public String aprobarCotizacion(@PathVariable Integer idCotizacion) {
+        cotizacionService.aprobar(idCotizacion);
+        return "redirect:/cotizacion/listado";
+    }
+
+    // 7. Rechazar cotizacion (ADMIN)
+    @GetMapping("/rechazar/{idCotizacion}")
+    public String rechazarCotizacion(@PathVariable Integer idCotizacion) {
+        cotizacionService.rechazar(idCotizacion);
         return "redirect:/cotizacion/listado";
     }
 }

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Catálogo de Materiales</title>
+    <link rel="stylesheet" 
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-dark px-4">
+    <span class="navbar-brand">Sinsa Logistics</span>
+    <div>
+        <a href="/catalogo/cotizar" class="btn btn-success btn-sm me-2">Nueva Cotización</a>
+        <a href="/logout" class="btn btn-outline-light btn-sm">Cerrar sesión</a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h4 class="mb-3">Catálogo de Materiales</h4>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" th:each="material : ${materiales}">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${material.nombre}"></h5>
+                    <p class="card-text text-muted" th:text="${material.descripcion}"></p>
+                    <ul class="list-unstyled">
+                        <li><strong>Precio:</strong> ₡<span th:text="${material.precio}"></span></li>
+                        <li><strong>Stock disponible:</strong> 
+                            <span th:text="${material.stock}"
+                                  th:classappend="${material.stock == 0} ? 'text-danger' : 'text-success'">
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-footer">
+                    <span th:if="${material.stock > 0}" class="badge bg-success">Disponible</span>
+                    <span th:if="${material.stock == 0}" class="badge bg-danger">Sin stock</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

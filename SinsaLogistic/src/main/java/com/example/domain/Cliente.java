@@ -26,38 +26,24 @@ public class Cliente implements Serializable {
     @NotBlank
     private String direccion;
 
-    public Cliente() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
 
-    public Integer getIdCliente() {
-        return idCliente;
-    }
+    public Cliente() {}
 
-    public void setIdCliente(Integer idCliente) {
-        this.idCliente = idCliente;
-    }
+    public Integer getIdCliente() { return idCliente; }
+    public void setIdCliente(Integer idCliente) { this.idCliente = idCliente; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public String getCorreo() { return correo; }
+    public void setCorreo(String correo) { this.correo = correo; }
 
-    public String getCorreo() {
-        return correo;
-    }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
+    public Usuario getUsuario() { return usuario; }
+    public void setUsuario(Usuario usuario) { this.usuario = usuario; }
 }

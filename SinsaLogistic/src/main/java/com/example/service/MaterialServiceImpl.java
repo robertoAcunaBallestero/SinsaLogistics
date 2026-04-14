@@ -23,6 +23,11 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public Material getMaterialById(Integer id) {  
+        return materialRepository.findById(id).orElse(null);
+    }
+
+    @Override
     public void save(Material material) {
         materialRepository.save(material);
     }

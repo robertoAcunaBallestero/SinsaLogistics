@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/*
+Ángel Rodríguez Vargas
+*/
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
@@ -20,6 +23,11 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     public Cliente getCliente(Cliente cliente) {
         return clienteRepository.findById(cliente.getIdCliente()).orElse(null);
+    }
+
+    @Override
+    public Cliente getClienteByUsername(String username) { 
+        return clienteRepository.findByUsuarioUsername(username);
     }
 
     @Override
